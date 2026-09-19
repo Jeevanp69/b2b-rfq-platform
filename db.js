@@ -1,0 +1,6 @@
+import { DatabaseSync } from 'node:sqlite';
+import fs from 'node:fs';
+fs.mkdirSync('data',{recursive:true});
+const db=new DatabaseSync('data/rfq.db'); db.exec('PRAGMA foreign_keys = ON');
+db.exec(`CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT,name TEXT NOT NULL,email TEXT NOT NULL UNIQUE COLLATE NOCASE,password_hash TEXT NOT NULL,role TEXT NOT NULL CHECK(role IN ('buyer','supplier')),created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP); CREATE TABLE IF NOT EXISTS rfqs (id INTEGER PRIMARY KEY AUTOINCREMENT,buyer_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,product_name TEXT NOT NULL,description TEXT NOT NULL,quantity INTEGER NOT NULL CHECK(quantity>0),delivery_location TEXT NOT NULL,deadline TEXT NOT NULL,status TEXT NOT NULL DEFAULT 'open' CHECK(status IN ('open','closed')),created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP); CREATE TABLE IF NOT EXISTS quotations (id INTEGER PRIMARY KEY AUTOINCREMENT,rfq_id INTEGER NOT NULL REFERENCES rfqs(id) ON DELETE CASCADE,supplier_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,price REAL NOT NULL CHECK(price>=0),delivery_days INTEGER NOT NULL CHECK(delivery_days>0),notes TEXT NOT NULL,created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,UNIQUE(rfq_id,supplier_id));`);
+export default db;
