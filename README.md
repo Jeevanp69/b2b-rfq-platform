@@ -2,6 +2,10 @@
 
 Procurely is a compact full-stack application where buyers create and manage RFQs, and suppliers find open requirements and submit one quotation per RFQ.
 
+## Live Demo
+
+[Open the live application](https://b2b-rfq-platform.onrender.com)
+
 ## Technology
 
 - **Backend:** Node.js built-in HTTP server and REST API
