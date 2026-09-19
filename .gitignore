@@ -1,3 +1,4 @@
 node_modules/
+.npm-cache/
 data/*.db
 .env
